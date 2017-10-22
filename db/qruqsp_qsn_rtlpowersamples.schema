@@ -1,0 +1,47 @@
+#
+# Description
+# -----------
+# This table stores the samples from rtl_power command line. Samples will be taken
+# typically every 10seconds, and DB data is stored in rtlpower_data table.
+#
+# Fields
+# ------
+# id:                       The ID assigned to the item.
+# uuid:                     The Universal Unique ID.
+# station_id:               The station the item is attached to.
+#
+# sample_date:              The UTC date and time the sample was taken.
+#
+# gain:                     The gain used in the rtl_power settings.
+# frequency_start:          The start frequency used in rtl_power settings.
+# frequency_step:           The step frequency used in rtl_power settings, typically 5k.
+# frequency_end:            The end frequency used in rtl_power settings.
+#
+# dbm_lowest:               The lowest DB reading for the sample.
+# dbm_highest:              The highest DB reading for the sample.
+# dbm_qty:                  The number of data points per sample. Data points will be pruned and removed
+#                           from the rtlpower_data table over time, so this value may not match the number
+#                           of rows in rtlpower_data.
+#
+# date_added:               The UTC date and time the record was added.
+# last_updated:             The UTC date and time the record was last updated.
+#
+create table qruqsp_qsn_rtlpowersamples (
+    id int not null auto_increment,
+    uuid char(36) not null,
+    station_id int not null,
+    sample_date datetime not null,
+    gain tinyint unsigned not null,
+    frequency_start mediumint unsigned not null,
+    frequency_step mediumint unsigned not null,
+    frequency_end mediumint unsigned not null,
+    dbm_lowest smallint not null,
+    dbm_highest smallint not null,
+    dbm_qty smallint unsigned not null,
+    date_added datetime not null,
+    last_updated datetime not null,
+    primary key (id),
+    unique index (uuid),
+    index (sample_date, frequency_start, frequency_end),
+    index sync (station_id, uuid, last_updated)
+) ENGINE='InnoDB', COMMENT='v1.01';
