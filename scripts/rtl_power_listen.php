@@ -93,7 +93,7 @@ while( $exit == 'no' ) {
     }
 }
 
-
+/*
 function processLine($line) {
     $elements = explode(',', $line);
     $date = $elements[0];
@@ -107,5 +107,5 @@ function processLine($line) {
     }
     print "\n";
 }
-
+*/
 ?>
