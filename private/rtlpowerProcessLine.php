@@ -16,9 +16,15 @@ function qruqsp_qsn_rtlpowerProcessLine(&$q, $station_id, $line, $args) {
     // Setup the sample
     //
     $elements = explode(',', $line);
+
+    //
+    // Date will be in local timezone, convert to UTC
+    //
+    $dt = new DateTime($elements[0] . ' ' . $elements[1]);
+    $dt->setTimezone(new DateTimezone('UTC'));
     $sample = array(
         'id' => 0,
-        'sample_date' => $elements[0] . ' ' . $elements[1],
+        'sample_date' => $dt->format('Y-m-d H:i:s'),
         'gain' => $args['gain'],
         'frequency_start' => $args['frequency_start']/1000,
         'frequency_step' => $elements[4]/1000,
@@ -62,7 +68,6 @@ function qruqsp_qsn_rtlpowerProcessLine(&$q, $station_id, $line, $args) {
     for($i=6;$i<count($elements);$i++) {
         $freq = (int)($start + (($i-6) * $step))/1000;
         $dbm = (int)($elements[$i] * 100);
-        print "$freq, $dbm\n";
         $rc = $stmt->execute();
         if( $rc === false ) {
             return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.qsn.3', 'msg'=>'Unable to add data'));

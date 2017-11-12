@@ -56,8 +56,10 @@ if( isset($q['config']['qruqsp.qsn']['station_id']) ) {
 //
 $rtl_cmd = 'rtl_power';
 $gain = 5;
-$start_freq = 144380000;
-$end_freq = 144460000;
+//$start_freq = 144380000;
+//$end_freq = 144460000;
+$start_freq = 143500000;
+$end_freq = 148620000;
 $bin_size = 5000;
 
 //
@@ -92,20 +94,4 @@ while( $exit == 'no' ) {
         break;
     }
 }
-
-/*
-function processLine($line) {
-    $elements = explode(',', $line);
-    $date = $elements[0];
-    $time = $elements[1];
-    $start = $elements[2];
-    $step = $elements[4];
-
-    for($i=6;$i<count($elements);$i++) {
-        $freq = $start + (($i-6) * $step);
-        print $date . ' ' . $time . ' ' . $freq . ' ' . $elements[$i] . "\n";
-    }
-    print "\n";
-}
-*/
 ?>

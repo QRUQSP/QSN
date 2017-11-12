@@ -5,7 +5,7 @@ function qruqsp_qsn_main() {
     //
     // The panel to list the rtlpowersample
     //
-    this.menu = new Q.panel('rtlpowersample', 'qruqsp_qsn_main', 'menu', 'mc', 'large narrowaside', 'sectioned', 'qruqsp.qsn.main.menu');
+    this.menu = new Q.panel('RTL Heatmap', 'qruqsp_qsn_main', 'menu', 'mc', 'large narrowaside', 'sectioned', 'qruqsp.qsn.main.menu');
     this.menu.data = {};
     this.menu.nplist = [];
     this.menu.sections = {
@@ -36,16 +36,20 @@ function qruqsp_qsn_main() {
         return 'Q.qruqsp_qsn_main.rtlpowersample.open(\'Q.qruqsp_qsn_main.menu.open();\',\'' + d.id + '\');';
     } */
     this.menu.fieldValue = function(s, i, d) {
-        var dt = new Date();
+        if( this.data.heatmap != null ) {
+            return this.data.heatmap[i];
+        }
+        return '';
+/*        var dt = new Date();
         switch (i) {
             case 'start_frequency': return '144360';
             case 'end_frequency': return '144420';
-            case 'start_date': return dt.getFullYear() + '-' + (dt.getMonth()+1) + '-0' + dt.getDate();;
+            case 'start_date': return dt.getFullYear() + '-' + (dt.getMonth()+1) + '-' + dt.getDate();;
             case 'start_time': return '1600';
-            case 'end_date': return dt.getFullYear() + '-' + (dt.getMonth()+1) + '-0' + dt.getDate();;
+            case 'end_date': return dt.getFullYear() + '-' + (dt.getMonth()+1) + '-' + dt.getDate();;
             case 'end_time': return '1610';
         }
-        return null;
+        return null; */
     }
     this.menu.heatmapData = function(s) {
         if( this.data[s] != null ) {
@@ -66,7 +70,17 @@ function qruqsp_qsn_main() {
         }
     } */
     this.menu.open = function(cb) {
-        this.show(cb);
+        Q.api.getJSONCb('qruqsp.qsn.rtlpowerHeatmap', {'station_id':Q.curStationID}, function(rsp) {
+            if( rsp.stat != 'ok' ) {
+                Q.api.err(rsp);
+                return false;
+            }
+            var p = Q.qruqsp_qsn_main.menu;
+            p.data = rsp;
+            console.log(rsp);
+            p.refresh();
+            p.show();
+        }); 
     } 
     this.menu.loadHeatmap = function() {
         var args = {
