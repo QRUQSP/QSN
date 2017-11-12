@@ -100,8 +100,16 @@ function qruqsp_qsn_rtlpowerHeatmap($q) {
 
 //    $min_ts = 99999999999;
 //    $max_ts = 0;
+    $heatmap['xlabels'] = array();
+    for($j = $args['start_frequency']; $j <= $args['end_frequency']; $j+=5) {
+        $heatmap['xlabels'][] = number_format($j/1000,3);
+    }
     while($cur_dt < $end_dt) {
-        $slice = array('time' => $cur_dt->format('M j, Y H:i:s'), 'samples' => array());
+        $slice = array(
+            'date' => $cur_dt->format('M j, Y'), 
+            'time' => $cur_dt->format('H:i:s'), 
+            'samples' => array(),
+            );
         $ts = $cur_dt->getTimestamp();
 //        if( $ts < $min_ts ) {   
 //            $min_ts = $ts;

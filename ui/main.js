@@ -5,11 +5,11 @@ function qruqsp_qsn_main() {
     //
     // The panel to list the rtlpowersample
     //
-    this.menu = new Q.panel('RTL Heatmap', 'qruqsp_qsn_main', 'menu', 'mc', 'large narrowaside', 'sectioned', 'qruqsp.qsn.main.menu');
+    this.menu = new Q.panel('RTL Heatmap', 'qruqsp_qsn_main', 'menu', 'mc', 'full', 'sectioned', 'qruqsp.qsn.main.menu');
     this.menu.data = {};
     this.menu.nplist = [];
     this.menu.sections = {
-        'selector':{'label':'', 'aside':'yes', 'fields':{
+        'selector':{'label':'', 'fields':{
             'start_frequency':{'label':'Start Freq', 'type':'text'},
             'end_frequency':{'label':'End Freq', 'type':'text'},
             'start_date':{'label':'Start Date', 'type':'date'},
@@ -58,6 +58,12 @@ function qruqsp_qsn_main() {
         return {'data':[]};
     }
     this.menu.cellValue = function(s, i, j, d) {
+        if( s == 'selector' ) {
+            switch(j) {
+                case 0: return 'Start';
+                case 1: return 'Start';
+            }
+        }
         if( s == 'rtlpowersamples' ) {
             switch(j) {
                 case 0: return d.name;
@@ -77,7 +83,6 @@ function qruqsp_qsn_main() {
             }
             var p = Q.qruqsp_qsn_main.menu;
             p.data = rsp;
-            console.log(rsp);
             p.refresh();
             p.show();
         }); 
