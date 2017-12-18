@@ -7,10 +7,10 @@
 // Arguments
 // ---------
 // q:
-// station_id:                  The ID of the station to check the session user against.
+// tnid:                        The ID of the tenant to check the session user against.
 // method:                      The requested method.
 //
-function qruqsp_qsn_rtlpowerProcessLine(&$q, $station_id, $line, $args) {
+function qruqsp_qsn_rtlpowerProcessLine(&$ciniki, $tnid, $line, $args) {
   
     //
     // Setup the sample
@@ -37,7 +37,7 @@ function qruqsp_qsn_rtlpowerProcessLine(&$q, $station_id, $line, $args) {
     if( isset($args['prev_sample']['sample_date']) && $args['prev_sample']['sample_date'] == $sample['sample_date'] ) {
         $sample = $args['prev_sample'];
     } else {
-        $rc = qruqsp_core_objectAdd($q, $station_id, 'qruqsp.qsn.rtlpowersample', $sample);
+        $rc = ciniki_core_objectAdd($ciniki, $tnid, 'qruqsp.qsn.rtlpowersample', $sample);
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -47,14 +47,14 @@ function qruqsp_qsn_rtlpowerProcessLine(&$q, $station_id, $line, $args) {
     //
     // Setup the insert query
     //
-    $rc = qruqsp_core_dbConnect($q, 'qruqsp.qsn');
+    $rc = ciniki_core_dbConnect($ciniki, 'qruqsp.qsn');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
     $dh = $rc['dh'];
 
     $stmt = mysqli_prepare($dh, "INSERT INTO qruqsp_qsn_rtlpowerdata (sample_id, frequency, dbm) VALUES ("
-        . "'" . qruqsp_core_dbQuote($q, $sample['id']) . "', ?, ?);");
+        . "'" . ciniki_core_dbQuote($ciniki, $sample['id']) . "', ?, ?);");
     if( $stmt === false ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.qsn.4', 'msg'=>'Unable to setup insert'));
     }

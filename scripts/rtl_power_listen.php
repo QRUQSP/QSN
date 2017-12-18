@@ -8,47 +8,47 @@
 //
 
 //
-// Initialize QRUQSP by including the qruqsp_api.php
+// Initialize CINIKI by including the ciniki-api.ini
 //
 $start_time = microtime(true);
-global $qruqsp_root;
-$qruqsp_root = dirname(__FILE__);
-if( !file_exists($qruqsp_root . '/qruqsp-api.ini') ) {
-    $qruqsp_root = dirname(dirname(dirname(dirname(__FILE__))));
+global $ciniki_root;
+$ciniki_root = dirname(__FILE__);
+if( !file_exists($ciniki_root . '/ciniki-api.ini') ) {
+    $ciniki_root = dirname(dirname(dirname(dirname(__FILE__))));
 }
 
-require_once($qruqsp_root . '/qruqsp-mods/core/private/loadMethod.php');
-require_once($qruqsp_root . '/qruqsp-mods/core/private/init.php');
+require_once($ciniki_root . '/ciniki-mods/core/private/loadMethod.php');
+require_once($ciniki_root . '/ciniki-mods/core/private/init.php');
 
 
 //
 // Initialize Q
 //
-$rc = qruqsp_core_init($qruqsp_root, 'json');
+$rc = ciniki_core_init($ciniki_root, 'json');
 if( $rc['stat'] != 'ok' ) {
     print "ERR: Unable to initialize Q\n";
     exit;
 }
 
 //
-// Setup the $qruqsp variable to hold all things qruqsp.  
+// Setup the $ciniki variable to hold all things qruqsp.  
 //
-$q = $rc['q'];
+$ciniki = $rc['ciniki'];
 
 //
 // Load required modules
 //
-qruqsp_core_loadMethod($q, 'qruqsp', 'core', 'private', 'dbConnect');
-qruqsp_core_loadMethod($q, 'qruqsp', 'core', 'private', 'objectAdd');
-qruqsp_core_loadMethod($q, 'qruqsp', 'qsn', 'private', 'rtlpowerProcessLine');
+ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbConnect');
+ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
+ciniki_core_loadMethod($ciniki, 'qruqsp', 'qsn', 'private', 'rtlpowerProcessLine');
 
 //
-// Check which station_id we should use
+// Check which tnid we should use
 //
-if( isset($q['config']['qruqsp.qsn']['station_id']) ) {
-    $station_id = $q['config']['qruqsp.qsn']['station_id'];
+if( isset($ciniki['config']['qruqsp.qsn']['tnid']) ) {
+    $tnid = $ciniki['config']['qruqsp.qsn']['tnid'];
 } else {
-    $station_id = $q['config']['qruqsp.core']['master_station_id'];
+    $tnid = $ciniki['config']['ciniki.core']['master_tnid'];
 }
 
 //
@@ -76,7 +76,7 @@ while( $exit == 'no' ) {
     $byte = fread($handle, 1);
     
     if( $byte  == "\n" ) {
-        $rc = qruqsp_qsn_rtlpowerProcessLine($q, $station_id, $line, array(
+        $rc = qruqsp_qsn_rtlpowerProcessLine($ciniki, $tnid, $line, array(
             'gain' => $gain,
             'frequency_start' => $start_freq,
             'frequency_end' => $end_freq,

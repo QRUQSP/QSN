@@ -7,7 +7,7 @@
 // Arguments
 // ---------
 //
-function qruqsp_qsn_flags(&$q) {
+function qruqsp_qsn_flags(&$ciniki) {
     //
     // The flags for the object
     //

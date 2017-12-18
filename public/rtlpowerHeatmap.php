@@ -2,21 +2,21 @@
 //
 // Description
 // -----------
-// This method will return the list of RTL Power Samples for a station.
+// This method will return the list of RTL Power Samples for a tenant.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// station_id:        The ID of the station to get RTL Power Sample for.
+// tnid:              The ID of the tenant to get RTL Power Sample for.
 //
-function qruqsp_qsn_rtlpowerHeatmap($q) {
+function qruqsp_qsn_rtlpowerHeatmap($ciniki) {
     //
     // Find all the required and optional arguments
     //
-    qruqsp_core_loadMethod($q, 'qruqsp', 'core', 'private', 'prepareArgs');
-    $rc = qruqsp_core_prepareArgs($q, 'no', array(
-        'station_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Station'),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
+    $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
         'start_frequency'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Start Frequency'),
         'end_frequency'=>array('required'=>'no', 'blank'=>'no', 'name'=>'End Frequency'),
         'start_date'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Start Date'),
@@ -30,10 +30,10 @@ function qruqsp_qsn_rtlpowerHeatmap($q) {
     $args = $rc['args'];
 
     //
-    // Check access to station_id as owner, or sys admin.
+    // Check access to tnid as owner, or sys admin.
     //
-    qruqsp_core_loadMethod($q, 'qruqsp', 'qsn', 'private', 'checkAccess');
-    $rc = qruqsp_qsn_checkAccess($q, $args['station_id'], 'qruqsp.qsn.rtlpowerHeatmap');
+    ciniki_core_loadMethod($ciniki, 'qruqsp', 'qsn', 'private', 'checkAccess');
+    $rc = qruqsp_qsn_checkAccess($ciniki, $args['tnid'], 'qruqsp.qsn.rtlpowerHeatmap');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -45,11 +45,11 @@ function qruqsp_qsn_rtlpowerHeatmap($q) {
     if( !isset($args['start_frequency']) || $args['start_frequency'] == '' ) {
         $strsql = "SELECT sample_date, frequency_start, frequency_end "
             . "FROM qruqsp_qsn_rtlpowersamples "
-            . "WHERE station_id = '" . qruqsp_core_dbQuote($q, $args['station_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY sample_date DESC "
             . "LIMIT 1 "
             . "";
-        $rc = qruqsp_core_dbHashQuery($q, $strsql, 'qruqsp.qsn', 'sample');
+        $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'qruqsp.qsn', 'sample');
         if( $rc['stat'] != 'ok' ) {
             return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.qsn.10', 'msg'=>'Unable to load sample', 'err'=>$rc['err']));
         }
@@ -144,15 +144,15 @@ function qruqsp_qsn_rtlpowerHeatmap($q) {
         . "FROM qruqsp_qsn_rtlpowersamples AS s "
         . "LEFT JOIN qruqsp_qsn_rtlpowerdata AS d ON ("
             . "s.id = d.sample_id "
-            . "AND d.frequency >= '" . qruqsp_core_dbQuote($q, $args['start_frequency']) . "' "
-            . "AND d.frequency <= '" . qruqsp_core_dbQuote($q, $args['end_frequency']) . "' "
+            . "AND d.frequency >= '" . ciniki_core_dbQuote($ciniki, $args['start_frequency']) . "' "
+            . "AND d.frequency <= '" . ciniki_core_dbQuote($ciniki, $args['end_frequency']) . "' "
             . ") "
-        . "WHERE s.station_id = '" . qruqsp_core_dbQuote($q, $args['station_id']) . "' "
-        . "AND s.sample_date >= '" . qruqsp_core_dbQuote($q, $start_date_sql) . "' "
-        . "AND s.sample_date <= '" . qruqsp_core_dbQuote($q, $end_date_sql) . "' "
+        . "WHERE s.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
+        . "AND s.sample_date >= '" . ciniki_core_dbQuote($ciniki, $start_date_sql) . "' "
+        . "AND s.sample_date <= '" . ciniki_core_dbQuote($ciniki, $end_date_sql) . "' "
         . "";
-    qruqsp_core_loadMethod($q, 'qruqsp', 'core', 'private', 'dbHashQueryArrayTree');
-    $rc = qruqsp_core_dbHashQueryArrayTree($q, $strsql, 'qruqsp.qsn', array(
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'qruqsp.qsn', array(
         array('container'=>'rtlpowersamples', 'fname'=>'sampledataid', 
             'fields'=>array('sample_date', 'gain', 'frequency_start', 'frequency_step', 'frequency_end', 
                 'dbm_lowest', 'dbm_highest', 'dbm_qty', 'dbm', 'frequency')),

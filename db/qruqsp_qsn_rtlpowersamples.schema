@@ -8,7 +8,7 @@
 # ------
 # id:                       The ID assigned to the item.
 # uuid:                     The Universal Unique ID.
-# station_id:               The station the item is attached to.
+# tnid:                     The tenant the item is attached to.
 #
 # sample_date:              The UTC date and time the sample was taken.
 #
@@ -29,7 +29,7 @@
 create table qruqsp_qsn_rtlpowersamples (
     id int not null auto_increment,
     uuid char(36) not null,
-    station_id int not null,
+    tnid int not null,
     sample_date datetime not null,
     gain tinyint unsigned not null,
     frequency_start mediumint unsigned not null,
@@ -43,5 +43,5 @@ create table qruqsp_qsn_rtlpowersamples (
     primary key (id),
     unique index (uuid),
     index (sample_date, frequency_start, frequency_end),
-    index sync (station_id, uuid, last_updated)
+    index sync (tnid, uuid, last_updated)
 ) ENGINE='InnoDB', COMMENT='v1.01';

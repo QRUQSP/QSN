@@ -8,7 +8,7 @@
 // ---------
 // q: 
 //
-function qruqsp_qsn_maps(&$q) {
+function qruqsp_qsn_maps(&$ciniki) {
     //
     // Build the maps object
     //

@@ -7,7 +7,7 @@
 // Arguments
 // ---------
 //
-function qruqsp_qsn_objects(&$q) {
+function qruqsp_qsn_objects(&$ciniki) {
     //
     // Build the objects
     //
