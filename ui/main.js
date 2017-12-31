@@ -84,7 +84,7 @@ function qruqsp_qsn_main() {
             var p = M.qruqsp_qsn_main.menu;
             p.data = rsp;
             p.refresh();
-            p.show();
+            p.show(cb);
         }); 
     } 
     this.menu.loadHeatmap = function() {

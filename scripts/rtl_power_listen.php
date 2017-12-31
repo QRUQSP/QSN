@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 //
 // Description
@@ -20,7 +20,7 @@ if( !file_exists($ciniki_root . '/ciniki-api.ini') ) {
 require_once($ciniki_root . '/ciniki-mods/core/private/loadMethod.php');
 require_once($ciniki_root . '/ciniki-mods/core/private/init.php');
 
-
+print "$ciniki_root\n";
 //
 // Initialize Q
 //
