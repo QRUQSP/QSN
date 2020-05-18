@@ -182,15 +182,15 @@ function qruqsp_qsn_main() {
         }
     }
     this.rtlpowersample.remove = function() {
-        if( confirm('Are you sure you want to remove rtlpowersample?') ) {
-            M.api.getJSONCb('qruqsp.qsn.rtlpowersampleDelete', {'tnid':M.curTenantID, 'rtlpowersample_id':this.rtlpowersample_id}, function(rsp) {
+        M.confirm('Are you sure you want to remove rtlpowersample?',null,function() {
+            M.api.getJSONCb('qruqsp.qsn.rtlpowersampleDelete', {'tnid':M.curTenantID, 'rtlpowersample_id':M.qruqsp_qsn_main.rtlpowersample.rtlpowersample_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.qruqsp_qsn_main.rtlpowersample.close();
             });
-        }
+        });
     }
     this.rtlpowersample.nextButtonFn = function() {
         if( this.nplist != null && this.nplist.indexOf('' + this.rtlpowersample_id) < (this.nplist.length - 1) ) {
@@ -226,7 +226,7 @@ function qruqsp_qsn_main() {
         //
         var ac = M.createContainer(ap, 'qruqsp_qsn_main', 'yes');
         if( ac == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
         
